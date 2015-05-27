@@ -9,15 +9,25 @@
   "homepage": "https://github.com/mattstauffer/podcastwar",
   "private": true,
   "scripts": {
-    "build": "npm run lint && npm run build-js && npm run build-less",
-    "build-js": "browserify src/js/main.js | uglifyjs -mc > dist/js/bundle.js",
-    "build-less": "lessc src/less/main.less dist/css/main.css",
+    "build": "npm run lint && npm run build:clean && npm run build:js && npm run build:less",
+    "build:clean": "rm -r dist/css/* && rm -r dist/js/*",
+
+    "build:js": "browserify src/js/main.js | uglifyjs -mc > dist/js/bundle.js",
+    "watch:js": "watch 'npm run build:js' src/js/",
+
+    "build:less": "less src/less/main.less > dist/css/main.css",
+    "watch:less": "watch 'npm run build:less' src/less",
+
+    "build:watch": "parallelshell 'npm run watch:js' 'npm run watch:less'",
+
     "lint": "jshint src/js/**.js"
   },
   "devDependencies": {
     "browserify": "^10.2.1",
     "jshint": "^2.7.0",
     "less": "^2.5.1",
-    "uglifyjs": "^2.4.10"
+    "parallelshell": "^1.1.1",
+    "uglifyjs": "^2.4.10",
+    "watch": "^0.16.0"
   }
 }

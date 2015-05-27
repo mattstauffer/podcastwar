@@ -1,6 +1,6 @@
-alert('test');
+alert('woma');
 
-function () {
+function awesome() {
     // Badly formatted
     for( i = 1; i<=15; i++)
     {
