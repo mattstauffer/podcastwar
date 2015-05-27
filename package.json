@@ -12,7 +12,7 @@
     "build": "npm run lint && npm run build:clean && npm run build:js && npm run build:less",
     "build:clean": "rm -r dist/css/* && rm -r dist/js/*",
 
-    "build:js": "browserify src/js/main.js | uglifyjs -mc > dist/js/bundle.js",
+    "build:js": "uglifyjs src/js/main.js -mc > dist/js/bundle.js",
     "watch:js": "watch 'npm run build:js' src/js/",
 
     "build:less": "less src/less/main.less > dist/css/main.css",
