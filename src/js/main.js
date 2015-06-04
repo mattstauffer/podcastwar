@@ -21,7 +21,13 @@ var DiceGame = (function(){
 
     var init = function() {
         for (i = 1; i <= numDice; i++) {
-            live.push($('#cube-' + i));
+            var $cube = $('#cube-' + i);
+
+            $cube.on('click', function() {
+                moveCubeToPool($(this));
+            });
+
+            live.push($cube);
         }
 
         $throwButton = $('#roll-button');
@@ -43,6 +49,11 @@ var DiceGame = (function(){
 
     var getRandomNumber = function() {
         return Math.round(Math.random() * 5) + 1;
+    };
+
+    var moveCubeToPool = function($cube) {
+        $cube.css('margin-top', '30em');
+        console.log($cube);
     };
 
     return {
