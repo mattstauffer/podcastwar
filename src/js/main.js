@@ -5,65 +5,51 @@ http://codepen.io/SpeauDetcR/pen/nxbCz
 http://codepen.io/tameraydin/pen/CADvB
 */
 
-var DiceUi = {
-    rollToNumber: function(num) {
-        console.log(num);
+var DiceGame = (function(){
+    var numDice = 6,
+        live = [],
+        pool = [],
+        $throwButton,
+        translate = {
+            1: 'show-back',
+            2: 'show-right',
+            3: 'show-left',
+            4: 'show-top',
+            5: 'show-bottom',
+            6: 'show-front'
+        };
 
-        var translate = {
-                1: 'show-back',
-                2: 'show-right',
-                3: 'show-left',
-                4: 'show-top',
-                5: 'show-bottom',
-                6: 'show-front'
-            },
-            $cube = $('#cube');
-
-        $cube.addClass(translate[num]);
-        $cube.removeClass($cube.data('previous-class'));
-        $cube.data('previous-class', translate[num]);
-    }
-};
-
-var DiceGame = {
-    init: function() {
-        var that = this;
-
-        that.$container = $('#container');
-        that.$throwButton = $('#throwButton');
-
-        that.$throwButton.on('click', function() {
-            that.throw();
-        });
-    },
-    throw: function() {
-        DiceUi.rollToNumber(this.getRandomNumber());
-    },
-    previousRandomNumber: 0,
-    live: [],
-    pool: [],
-    getRandomNumber: function() {
-        var num = Math.round(Math.random() * 5) + 1;
-
-        if (num == this.previousRandomNumber) {
-            num = this.getRandomNumber();
+    var init = function() {
+        for (i = 1; i <= numDice; i++) {
+            live.push($('#cube-' + i));
         }
 
-        this.previousRandomNumber = num;
+        $throwButton = $('#roll-button');
 
-        return num;
-    },
+        $throwButton.on('click', function() {
+            throwDice();
+        });
+    };
 
-};
+    var throwDice = function() {
+        for (cubeNum in live) {
+            roll(live[cubeNum]);
+        }
+    };
+
+    var roll = function($cube) {
+        $cube[0].className = 'cube ' + translate[getRandomNumber()];
+    };
+
+    var getRandomNumber = function() {
+        return Math.round(Math.random() * 5) + 1;
+    };
+
+    return {
+        init: init
+    }
+})();
 
 $(function() {
     DiceGame.init();
 });
-
-
-$(document).ready(function(){
-    $("a").click(function () {
-        DiceGame.throw();
-    });
-});
-
