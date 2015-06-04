@@ -1,101 +1,16 @@
-html{
-    background:#ddd;
+/* apply a natural box layout model to all elements, but allowing components to change */
+html {
+  box-sizing: border-box;
 }
-.container {
-    border: 1px solid #ccc;
-    height: 200px;
-    margin: 0 auto 40px;
-    perspective: 1000px;
-    position: relative;
-    width: 200px;
-}
-.cube-wrapper {
-    position: relative;
-}
-#cube-wrapper-1 {
-    margin-left: 20em;
-}
-#cube-wrapper-2 {
-    margin-left: 10em;
-}
-#cube-wrapper-3 {
-    margin-left: 0em;
-}
-#cube-wrapper-4 {
-    margin-left: -10em;
-}
-#cube-wrapper-5 {
-    margin-left: -20em;
-}
-#cube-wrapper-6 {
-    margin-left: -30em;
-}
-.cube {
-    height: 100%;
-    position: absolute;
-    transform-style: preserve-3d;
-    transform: translateZ(-100px);
-    transition: transform 0.5s;
-    width: 100%;
-}
-.cube figure {
-    border: 2px solid #000;
-    color: white;
-    display: block;
-    font-size: 120px;
-    font-weight: bold;
-    height: 196px;
-    line-height: 196px;
-    margin: 0px;
-    position: absolute;
-    text-align: center;
-    width: 196px;
+*, *:before, *:after {
+  box-sizing: inherit;
 }
 
-.cube .front  { background: hsla(  0, 100%, 50%, 1); }
-.cube .back   { background: hsla( 60, 100%, 50%, 1); }
-.cube .right  { background: hsla(120, 100%, 50%, 1); }
-.cube .left   { background: hsla(180, 100%, 50%, 1); }
-.cube .top    { background: hsla(240, 100%, 50%, 1); }
-.cube .bottom { background: hsla(300, 100%, 50%, 1); }
+@cube-height: 100px;
 
-.cube .front {
-    transform: rotateY(0deg) translateZ(100px);
+html {
+    background: #ddd;
 }
-.cube .back {
-    transform: rotateX(180deg) translateZ(100px);
-}
-.cube .right {
-    transform: rotateY(90deg) translateZ(100px);
-}
-.cube .left {
-    transform: rotateY(-90deg) translateZ(100px);
-}
-.cube .top {
-    transform: rotateX(90deg) translateZ(100px);
-}
-.cube .bottom {
-    transform: rotateX(-90deg) translateZ(100px);
-}
-.cube.show-front {
-    transform: translateZ(-100px) rotateY(0deg);
-}
-.cube.show-back {
-    transform: translateZ(-100px) rotateX(-180deg);
-}
-.cube.show-right {
-    transform: translateZ(-100px) rotateY(-90deg);
-}
-.cube.show-left {
-    transform: translateZ(-100px) rotateY(90deg);
-}
-.cube.show-top {
-    transform: translateZ(-100px) rotateX(-90deg);
-}
-.cube.show-bottom {
-    transform: translateZ(-100px) rotateX(90deg);
-}
-
 
 #roll-button {
     background: #fff;
@@ -105,8 +20,131 @@ html{
     cursor: pointer;
     display: block;
     height: 30px;
-    margin: auto;
+    margin: 1em auto;
     padding: 10px 0px 0px 0px;
     text-align: center;
     width: 120px;
+}
+
+
+.live-container, .pool-container {
+    float: left;
+    margin-bottom: 3em;
+    margin-right: 5%;
+    padding: 2em;
+    overflow: show;
+    width: 45%;
+}
+
+    .live-container h2, .pool-container h2 {
+        color: #fff;
+    }
+
+.live-container {
+    background: green;
+}
+
+.pool-container {
+    background: #333;
+}
+
+.cube-wrapper {
+    float: left;
+    height: @cube-height;
+    margin-bottom: 3em;
+    margin-left: 3em;
+    perspective: 1000px;
+    position: relative;
+    width: @cube-height;
+}
+
+    // super hack
+    .cube-wrapper.queued {
+        transform: translateY(400%);
+    }
+
+#cube-wrapper-1 {
+}
+#cube-wrapper-2 {
+}
+#cube-wrapper-3 {
+}
+#cube-wrapper-4 {
+}
+#cube-wrapper-5 {
+}
+#cube-wrapper-6 {
+}
+
+.cube {
+    cursor: pointer;
+    height: 100%;
+    position: absolute;
+    transform-style: preserve-3d;
+    transform: translateZ(@cube-height * -0.5);
+    transition: transform 0.5s;
+    width: 100%;
+}
+.cube figure {
+    background: #fff;
+    border: 1px solid #000;
+    color: #333;
+    display: block;
+    font-size: @cube-height * 0.6;
+    font-weight: bold;
+    height: @cube-height;
+    line-height: @cube-height;
+    margin: 0px;
+    position: absolute;
+    text-align: center;
+    width: @cube-height;
+}
+
+    .cube:hover figure {
+        background: #eee;
+    }
+
+
+// .cube .front  { background: hsla(  0, 100%, 50%, 1); }
+// .cube .back   { background: hsla( 60, 100%, 50%, 1); }
+// .cube .right  { background: hsla(120, 100%, 50%, 1); }
+// .cube .left   { background: hsla(180, 100%, 50%, 1); }
+// .cube .top    { background: hsla(240, 100%, 50%, 1); }
+// .cube .bottom { background: hsla(300, 100%, 50%, 1); }
+
+.cube .front {
+    transform: rotateY(0deg) translateZ(@cube-height * 0.5);
+}
+.cube .back {
+    transform: rotateX(180deg) translateZ(@cube-height * 0.5);
+}
+.cube .right {
+    transform: rotateY(90deg) translateZ(@cube-height * 0.5);
+}
+.cube .left {
+    transform: rotateY(-90deg) translateZ(@cube-height * 0.5);
+}
+.cube .top {
+    transform: rotateX(90deg) translateZ(@cube-height * 0.5);
+}
+.cube .bottom {
+    transform: rotateX(-90deg) translateZ(@cube-height * 0.5);
+}
+.cube.show-front {
+    transform: translateZ(@cube-height * -0.5) rotateY(0deg);
+}
+.cube.show-back {
+    transform: translateZ(@cube-height * -0.5) rotateX(-180deg);
+}
+.cube.show-right {
+    transform: translateZ(@cube-height * -0.5) rotateY(-90deg);
+}
+.cube.show-left {
+    transform: translateZ(@cube-height * -0.5) rotateY(90deg);
+}
+.cube.show-top {
+    transform: translateZ(@cube-height * -0.5) rotateX(-90deg);
+}
+.cube.show-bottom {
+    transform: translateZ(@cube-height * -0.5) rotateX(90deg);
 }

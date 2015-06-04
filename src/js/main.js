@@ -7,9 +7,10 @@ http://codepen.io/tameraydin/pen/CADvB
 
 var DiceGame = (function(){
     var numDice = 6,
+        rolled = false,
         live = [],
         pool = [],
-        $throwButton,
+        $throwButton, $liveContainer, $poolContainer,
         translate = {
             1: 'show-back',
             2: 'show-right',
@@ -30,6 +31,8 @@ var DiceGame = (function(){
             live.push($cube);
         }
 
+        $liveContainer = $('#live-container'),
+        $poolContainer = $('#pool-container'),
         $throwButton = $('#roll-button');
 
         $throwButton.on('click', function() {
@@ -38,6 +41,8 @@ var DiceGame = (function(){
     };
 
     var throwDice = function() {
+        $('.cube-wrapper').removeClass('queued');
+
         for (cubeNum in live) {
             roll(live[cubeNum]);
         }
@@ -52,8 +57,17 @@ var DiceGame = (function(){
     };
 
     var moveCubeToPool = function($cube) {
-        $cube.css('margin-top', '30em');
-        console.log($cube);
+        var removeFromLive = function($cube) {
+            live = live.filter(function (el) {
+                    return el.id != $cube[0].id;
+                });
+        };
+
+        removeFromLive($cube);
+
+        pool.push($cube);
+
+        $cube.closest('.cube-wrapper').detach().appendTo($poolContainer);
     };
 
     return {

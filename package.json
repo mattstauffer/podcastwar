@@ -9,11 +9,12 @@
   "homepage": "https://github.com/mattstauffer/podcastwar",
   "private": true,
   "scripts": {
+    "ping": "osascript -e 'display notification \"Podcast War Build Complete\" with title \"Ping\"'",
     "build": "npm run lint && npm run build:clean && npm run build:js && npm run build:less",
     "build:clean": "rm -r dist/css/* && rm -r dist/js/*",
-    "build:js": "browserify src/js/main.js | uglifyjs -mc > dist/js/bundle.js",
+    "build:js": "browserify src/js/main.js | uglifyjs -mc > dist/js/bundle.js && npm run ping",
     "watch:js": "watch 'npm run build:js' src/js/",
-    "build:less": "lessc --autoprefix=\"last 2 versions\" src/less/main.less > dist/css/main.css",
+    "build:less": "lessc --autoprefix=\"last 2 versions\" src/less/main.less > dist/css/main.css && npm run ping",
     "watch:less": "watch 'npm run build:less' src/less",
     "build:watch": "parallelshell 'npm run watch:js' 'npm run watch:less'",
     "lint": "jshint src/js/**.js"
