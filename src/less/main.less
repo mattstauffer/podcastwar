@@ -1,3 +1,91 @@
-body {
-    background: green;
+html{
+    background:#ddd;
+}
+.container {
+    border: 1px solid #ccc;
+    height: 200px;
+    margin: 0 auto 40px;
+    perspective: 1000px;
+    position: relative;
+    width: 200px;
+}
+#cube {
+    height: 100%;
+    position: absolute;
+    transform-style: preserve-3d;
+    transform: translateZ(-100px);
+    transition: transform 0.5s;
+    width: 100%;
+}
+#cube figure {
+    border: 2px solid #000;
+    color: white;
+    display: block;
+    font-size: 120px;
+    font-weight: bold;
+    height: 196px;
+    line-height: 196px;
+    margin: 0px;
+    position: absolute;
+    text-align: center;
+    width: 196px;
+}
+
+#cube .front  { background: hsla(  0, 100%, 50%, 0.7); }
+#cube .back   { background: hsla( 60, 100%, 50%, 0.7); }
+#cube .right  { background: hsla(120, 100%, 50%, 0.7); }
+#cube .left   { background: hsla(180, 100%, 50%, 0.7); }
+#cube .top    { background: hsla(240, 100%, 50%, 0.7); }
+#cube .bottom { background: hsla(300, 100%, 50%, 0.7); }
+
+#cube .front {
+    transform: rotateY(0deg) translateZ(100px);
+}
+#cube .back {
+    transform: rotateX(180deg) translateZ(100px);
+}
+#cube .right {
+    transform: rotateY(90deg) translateZ(100px);
+}
+#cube .left {
+    transform: rotateY(-90deg) translateZ(100px);
+}
+#cube .top {
+    transform: rotateX(90deg) translateZ(100px);
+}
+#cube .bottom {
+    transform: rotateX(-90deg) translateZ(100px);
+}
+#cube.show-front {
+    transform: translateZ(-100px) rotateY(0deg);
+}
+#cube.show-back {
+    transform: translateZ(-100px) rotateX(-180deg);
+}
+#cube.show-right {
+    transform: translateZ(-100px) rotateY(-90deg);
+}
+#cube.show-left {
+    transform: translateZ(-100px) rotateY(90deg);
+}
+#cube.show-top {
+    transform: translateZ(-100px) rotateX(-90deg);
+}
+#cube.show-bottom {
+    transform: translateZ(-100px) rotateX(90deg);
+}
+#go {
+    margin: auto;
+    width: 100%;
+}
+#now {
+    background: #fff;
+    border-radius: 5px;
+    border: 0px;
+    box-shadow: 0px 0px 5px #999;
+    height: 30px;
+    margin: auto;
+    padding: 10px 0px 0px 0px;
+    text-align: center;
+    width: 120px;
 }
