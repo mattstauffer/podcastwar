@@ -5,20 +5,34 @@ http://codepen.io/SpeauDetcR/pen/nxbCz
 http://codepen.io/tameraydin/pen/CADvB
 */
 
+/*
+@todo:
+- Add the concept of setting aside. Apparently if you're matching on 3s, you can
+  set aside any dice that are 4, 5, or 6, but *only* 3s can be added to the match.
+  Therefore, we need a third container (and according logic) for setting aside
+- Add scoring
+- Add user accounts
+- Add usage limitations
+- Add failure if all come up lower than current match
+-
+ */
+
 var DiceGame = (function(){
-    var numDice = 6,
+    var numDice = 5,
         rolled = false,
         chosen = false,
         live = [],
         pool = [],
-        $throwButton, $liveContainer, $poolContainer,
+        matchValue = null,
+        animLength = 500,
+        $throwButton, $liveContainer, $matchContainer, $discardContainer,
         translate = {
-            1: 'show-back',
-            2: 'show-right',
-            3: 'show-left',
-            4: 'show-top',
-            5: 'show-bottom',
-            6: 'show-front'
+            1: 'show-front',
+            2: 'show-back',
+            3: 'show-right',
+            4: 'show-left',
+            5: 'show-top',
+            6: 'show-bottom'
         };
 
     function Die(num) {
@@ -48,17 +62,45 @@ var DiceGame = (function(){
         },
         choose: function() {
             if (chosen) {
+                notify('You cannot choose a die until you roll again.');
                 return;
             }
 
-            // @todo: get an array of all dice with this same value, and then move them to pool, and then do some logic accordingly
+            if (! rolled) {
+                notify('You cannot choose a die until you have rolled.');
+                return;
+            }
+
             var that = this,
                 sameValueDice = live.filter(function (die) {
                     return die.value == that.value;
                 });
 
-            for (num in sameValueDice) {
-                sameValueDice[num].moveToPool();
+            if (matchValue === null) {
+                // If this is our first match, just set it
+                matchValue = this.value;
+
+                for (num in sameValueDice) {
+                    sameValueDice[num].moveToPool();
+                }
+            } else {
+                // If this is nor our first match, check our logic
+                if (matchValue == this.value) {
+                    for (num in sameValueDice) {
+                        sameValueDice[num].moveToPool();
+                    }
+                }
+
+                if (matchValue < this.value) {
+                    for (num in sameValueDice) {
+                        sameValueDice[num].moveToDiscard();
+                    }
+                }
+
+                if (matchValue > this.value) {
+                    notify("You can't choose dice with a value lower than your match.");
+                    return;
+                }
             }
 
             chosen = true;
@@ -68,7 +110,13 @@ var DiceGame = (function(){
 
             pool.push(this);
 
-            this.$el.closest('.cube-wrapper').detach().appendTo($poolContainer);
+            this.$el.closest('.cube-wrapper').detach().appendTo($matchContainer);
+        },
+        moveToDiscard: function() {
+            // @todo: Make this better
+            this.removeFromLive();
+
+            this.$el.closest('.cube-wrapper').detach().appendTo($discardContainer);
         },
         isInPool: function() {
 
@@ -91,7 +139,8 @@ var DiceGame = (function(){
         }
 
         $liveContainer = $('#live-container');
-        $poolContainer = $('#pool-container');
+        $matchContainer = $('#match-container');
+        $discardContainer = $('#discard-container');
         $throwButton = $('#roll-button');
 
         $throwButton.on('click', function() {
@@ -101,16 +150,42 @@ var DiceGame = (function(){
 
     var throwDice = function() {
         $('.cube-wrapper').removeClass('queued');
+        rolled = true;
 
         for (cubeNum in live) {
             live[cubeNum].roll();
         }
 
         chosen = false;
+
+        // Validate that roll can even go forward
+        for (cubeNum in live) {
+            if (live[cubeNum].value >= matchValue) {
+                return;
+            }
+        }
+
+        delayPastAnim(function () {
+            notify('Fail roll!');
+
+            quitAndScore();
+        });
     };
 
     var getRandomNumber = function() {
         return Math.round(Math.random() * 5) + 1;
+    };
+
+    var delayPastAnim = function(func) {
+        setTimeout(func, animLength);
+    };
+
+    var notify = function(str) {
+        alert(str);
+    };
+
+    var quitAndScore = function() {
+        alert('todo score');
     };
 
     return {
