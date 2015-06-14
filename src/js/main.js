@@ -8,6 +8,7 @@ http://codepen.io/tameraydin/pen/CADvB
 var DiceGame = (function(){
     var numDice = 6,
         rolled = false,
+        chosen = false,
         live = [],
         pool = [],
         $throwButton, $liveContainer, $poolContainer,
@@ -24,11 +25,12 @@ var DiceGame = (function(){
         this.num = num;
         this.id = 'cube-' + num;
         this.$el = $('#' + this.id);
+        this.value = 1;
 
         var that = this;
 
         this.$el.on('click', function() {
-            that.moveToPool();
+            that.choose();
         });
 
         if (this.$el.length === 0) {
@@ -40,9 +42,26 @@ var DiceGame = (function(){
         removeFromLive: function() {
             var that = this;
 
-            live = live.filter(function (el) {
-                return el.id != that.id;
+            live = live.filter(function (die) {
+                return die.id != that.id;
             });
+        },
+        choose: function() {
+            if (chosen) {
+                return;
+            }
+
+            // @todo: get an array of all dice with this same value, and then move them to pool, and then do some logic accordingly
+            var that = this,
+                sameValueDice = live.filter(function (die) {
+                    return die.value == that.value;
+                });
+
+            for (num in sameValueDice) {
+                sameValueDice[num].moveToPool();
+            }
+
+            chosen = true;
         },
         moveToPool: function() {
             this.removeFromLive();
@@ -58,7 +77,11 @@ var DiceGame = (function(){
 
         },
         roll: function() {
-            this.$el[0].className = 'cube ' + translate[getRandomNumber()];
+            var num = getRandomNumber();
+
+            this.$el[0].className = 'cube ' + translate[num];
+
+            this.value = num;
         }
     };
 
@@ -80,9 +103,10 @@ var DiceGame = (function(){
         $('.cube-wrapper').removeClass('queued');
 
         for (cubeNum in live) {
-            // roll(live[cubeNum]);
             live[cubeNum].roll();
         }
+
+        chosen = false;
     };
 
     var getRandomNumber = function() {
