@@ -29,7 +29,6 @@ var DiceGame = (function(){
 
         this.$el.on('click', function() {
             that.moveToPool();
-            // moveCubeToPool($(this));
         });
 
         if (this.$el.length === 0) {
@@ -57,6 +56,9 @@ var DiceGame = (function(){
         },
         isLive: function() {
 
+        },
+        roll: function() {
+            this.$el[0].className = 'cube ' + translate[getRandomNumber()];
         }
     };
 
@@ -78,31 +80,14 @@ var DiceGame = (function(){
         $('.cube-wrapper').removeClass('queued');
 
         for (cubeNum in live) {
-            roll(live[cubeNum]);
+            // roll(live[cubeNum]);
+            live[cubeNum].roll();
         }
-    };
-
-    var roll = function($cube) {
-        $cube.$el[0].className = 'cube ' + translate[getRandomNumber()];
     };
 
     var getRandomNumber = function() {
         return Math.round(Math.random() * 5) + 1;
     };
-
-    // var moveCubeToPool = function($cube) {
-    //     var removeFromLive = function($cube) {
-    //         live = live.filter(function (el) {
-    //                 return el.id != $cube.$el[0].id;
-    //             });
-    //     };
-
-    //     removeFromLive($cube);
-
-    //     pool.push($cube);
-
-    //     $cube.$el.closest('.cube-wrapper').detach().appendTo($poolContainer);
-    // };
 
     return {
         init: init
