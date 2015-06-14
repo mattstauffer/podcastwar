@@ -20,19 +20,53 @@ var DiceGame = (function(){
             6: 'show-front'
         };
 
+    function Die(num) {
+        this.num = num;
+        this.id = 'cube-' + num;
+        this.$el = $('#' + this.id);
+
+        var that = this;
+
+        this.$el.on('click', function() {
+            that.moveToPool();
+            // moveCubeToPool($(this));
+        });
+
+        if (this.$el.length === 0) {
+            throw "Die number " + num + " does not exist";
+        }
+    }
+
+    Die.prototype = {
+        removeFromLive: function() {
+            var that = this;
+
+            live = live.filter(function (el) {
+                return el.id != that.id;
+            });
+        },
+        moveToPool: function() {
+            this.removeFromLive();
+
+            pool.push(this);
+
+            this.$el.closest('.cube-wrapper').detach().appendTo($poolContainer);
+        },
+        isInPool: function() {
+
+        },
+        isLive: function() {
+
+        }
+    };
+
     var init = function() {
         for (i = 1; i <= numDice; i++) {
-            var $cube = $('#cube-' + i);
-
-            $cube.on('click', function() {
-                moveCubeToPool($(this));
-            });
-
-            live.push($cube);
+            live.push(new Die(i));
         }
 
-        $liveContainer = $('#live-container'),
-        $poolContainer = $('#pool-container'),
+        $liveContainer = $('#live-container');
+        $poolContainer = $('#pool-container');
         $throwButton = $('#roll-button');
 
         $throwButton.on('click', function() {
@@ -49,26 +83,26 @@ var DiceGame = (function(){
     };
 
     var roll = function($cube) {
-        $cube[0].className = 'cube ' + translate[getRandomNumber()];
+        $cube.$el[0].className = 'cube ' + translate[getRandomNumber()];
     };
 
     var getRandomNumber = function() {
         return Math.round(Math.random() * 5) + 1;
     };
 
-    var moveCubeToPool = function($cube) {
-        var removeFromLive = function($cube) {
-            live = live.filter(function (el) {
-                    return el.id != $cube[0].id;
-                });
-        };
+    // var moveCubeToPool = function($cube) {
+    //     var removeFromLive = function($cube) {
+    //         live = live.filter(function (el) {
+    //                 return el.id != $cube.$el[0].id;
+    //             });
+    //     };
 
-        removeFromLive($cube);
+    //     removeFromLive($cube);
 
-        pool.push($cube);
+    //     pool.push($cube);
 
-        $cube.closest('.cube-wrapper').detach().appendTo($poolContainer);
-    };
+    //     $cube.$el.closest('.cube-wrapper').detach().appendTo($poolContainer);
+    // };
 
     return {
         init: init
