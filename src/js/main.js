@@ -7,13 +7,9 @@ http://codepen.io/tameraydin/pen/CADvB
 
 /*
 @todo:
-- Add the concept of setting aside. Apparently if you're matching on 3s, you can
-  set aside any dice that are 4, 5, or 6, but *only* 3s can be added to the match.
-  Therefore, we need a third container (and according logic) for setting aside
 - Add scoring
 - Add user accounts
 - Add usage limitations
-- Add failure if all come up lower than current match
 -
  */
 
@@ -104,6 +100,10 @@ var DiceGame = (function(){
             }
 
             chosen = true;
+
+            if (live.length == 0) {
+                quitAndScore();
+            }
         },
         moveToPool: function() {
             this.removeFromLive();
@@ -181,11 +181,17 @@ var DiceGame = (function(){
     };
 
     var notify = function(str) {
-        alert(str);
+        var $alert = $('<div class="alert">').text(str);
+
+        $('#notifications').append($alert);
+
+        setTimeout(function() {
+            $alert.slideUp();
+        }, 3000);
     };
 
     var quitAndScore = function() {
-        alert('todo score');
+        notify('todo: actually write score calculations');
     };
 
     return {
