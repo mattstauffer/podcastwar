@@ -21,21 +21,25 @@ html {
     .alert {
         background: #eee;
         border: 1px solid #aaa;
-        margin-top: 1em;
+        margin-left: 10%;
         padding: 0.5em;
+        position: absolute;
+        top: 1em;
+        width: 80%;
     }
 
-#roll-button {
+.roll-button {
     background: #fff;
     border-radius: 5px;
     border: 0px;
     box-shadow: 0px 0px 5px #999;
     cursor: pointer;
     display: block;
-    height: 30px;
+    font-family: sans-serif;
     margin: 1em auto 2em;
-    padding: 10px 0px 0px 0px;
+    padding: 10px 0 10px 0;
     text-align: center;
+    user-select: none;
     width: 120px;
 }
 
@@ -75,19 +79,6 @@ html {
     .cube-wrapper.queued {
         transform: translateY(400%);
     }
-
-#cube-wrapper-1 {
-}
-#cube-wrapper-2 {
-}
-#cube-wrapper-3 {
-}
-#cube-wrapper-4 {
-}
-#cube-wrapper-5 {
-}
-#cube-wrapper-6 {
-}
 
 .cube {
     cursor: pointer;
