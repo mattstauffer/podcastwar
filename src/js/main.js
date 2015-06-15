@@ -13,7 +13,7 @@ http://codepen.io/tameraydin/pen/CADvB
 - Use pips instead of numbers
  */
 
-var DiceGame = (function(){
+var DiceGame = (function() {
     var numDice = 5,
         rolled = false,
         chosen = false,
@@ -66,6 +66,8 @@ var DiceGame = (function(){
                 notify('You cannot choose a die until you have rolled.');
                 return;
             }
+
+            $('#quit-and-score').css('display', 'block');
 
             var that = this,
                 sameValueDice = live.filter(function (die) {
@@ -142,9 +144,14 @@ var DiceGame = (function(){
         $matchContainer = $('#match-container');
         $discardContainer = $('#discard-container');
         $throwButton = $('#roll-button');
+        $quitAndScoreButton = $('#quit-and-score');
 
         $throwButton.on('click', function() {
             throwDice();
+        });
+
+        $quitAndScoreButton.on('click', function() {
+            quitAndScore();
         });
     };
 
