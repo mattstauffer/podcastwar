@@ -13,17 +13,19 @@ html {
 }
 .notifications {
   text-align: center;
-  margin: 2em;
+  left: 10%;
+  margin: 2em auto;
   padding: 0.25em;
+  position: absolute;
+  width: 80%;
+  z-index: 10;
 }
 .alert {
-  background: #eee;
+  background: red;
   border: 1px solid #aaa;
-  margin-left: 10%;
+  color: #fff;
+  margin-bottom: 1em;
   padding: 0.5em;
-  position: absolute;
-  top: 1em;
-  width: 80%;
 }
 .roll-button {
   background: #fff;
@@ -113,6 +115,10 @@ html {
   margin: 0px;
   position: absolute;
   text-align: center;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
   width: 100px;
 }
 .cube:hover figure {
