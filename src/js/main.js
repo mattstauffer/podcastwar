@@ -201,6 +201,7 @@ var DiceGame = (function() {
 
     var quitWithScore = function(score) {
         notify('You got ' + score + ' soldiery points for your podcast of choice');
+        $('#screen').css('display', 'block');
     };
 
     var devLog = function(str) {
