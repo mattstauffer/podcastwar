@@ -19,7 +19,7 @@ var DiceGame = (function() {
         chosen = false,
         live = [],
         pool = [],
-        matchValue = null,
+        highestMatch = 0,
         animLength = 500,
         $throwButton, $liveContainer, $matchContainer,
         translate = {
@@ -74,25 +74,17 @@ var DiceGame = (function() {
                     return die.value == that.value;
                 });
 
-            if (matchValue === null) {
-                // If this is our first match, just set it
-                matchValue = this.value;
+            if (this.value < highestMatch) {
+                notify("You can't choose dice with a value lower than your match.");
+                return;
+            }
 
-                for (num in sameValueDice) {
-                    sameValueDice[num].moveToPool();
-                }
-            } else {
-                // If this is not our first match, check our logic
-                if (this.value == matchValue || this.value > matchValue) {
-                    for (num in sameValueDice) {
-                        sameValueDice[num].moveToPool();
-                    }
-                }
+            if (this.value > highestMatch) {
+                highestMatch = this.value;
+            }
 
-                if (matchValue > this.value) {
-                    notify("You can't choose dice with a value lower than your match.");
-                    return;
-                }
+            for (num in sameValueDice) {
+                sameValueDice[num].moveToPool();
             }
 
             chosen = true;
@@ -154,7 +146,7 @@ var DiceGame = (function() {
 
         // Validate that roll can even go forward
         for (cubeNum in live) {
-            if (live[cubeNum].value >= matchValue) {
+            if (live[cubeNum].value >= highestMatch) {
                 return;
             }
         }
@@ -189,11 +181,17 @@ var DiceGame = (function() {
     };
 
     var quitAndScore = function() {
-        quitWithScore('@todo');
+        var score = 0;
+
+        for (die in pool) {
+            score += pool[die].value;
+        }
+
+        quitWithScore(score);
     };
 
     var quitWithScore = function(score) {
-        notify('Your score was: ' + score);
+        notify('You got ' + score + ' soldiery points for your podcast of choice');
     };
 
     return {
