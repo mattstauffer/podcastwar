@@ -10,7 +10,7 @@ http://codepen.io/tameraydin/pen/CADvB
 - Add scoring
 - Add user accounts
 - Add usage limitations
--
+- Use pips instead of numbers
  */
 
 var DiceGame = (function(){

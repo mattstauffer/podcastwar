@@ -1,15 +1,16 @@
 /* apply a natural box layout model to all elements, but allowing components to change */
 html {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 *, *:before, *:after {
-  box-sizing: inherit;
+    box-sizing: inherit;
 }
 
 @cube-height: 100px;
 
 html {
     background: #ddd;
+    font-family: sans-serif;
 }
 
 .notifications {
@@ -32,19 +33,33 @@ html {
     background: #fff;
     border-radius: 5px;
     border: 0px;
-    box-shadow: 0px 0px 5px #999;
+    box-shadow: 2px 2px 8px #bbb;
+    color: #555;
     cursor: pointer;
     display: block;
     font-family: sans-serif;
+    font-weight: bold;
     margin: 1em auto 2em;
-    padding: 10px 0 10px 0;
+    padding: 1.5em 0;
     text-align: center;
+    transform: translate(-2px, -2px);
     user-select: none;
     width: 120px;
 }
 
+    .roll-button:hover {
+        color: #000;
+    }
+
+    .roll-button:active {
+        box-shadow: 0px 0px 4px #888;
+        transform: translate(0, 0);
+    }
+
 
 .live-container, .pool-container {
+    border: 2px solid #444;
+    border-radius: 1em;
     float: left;
     margin-bottom: 3em;
     margin-right: 5%;
@@ -91,7 +106,7 @@ html {
 }
 .cube figure {
     background: #fff;
-    border: 1px solid #000;
+    border: 3px solid #999;
     color: #333;
     display: block;
     font-size: @cube-height * 0.6;
