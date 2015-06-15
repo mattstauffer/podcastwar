@@ -21,7 +21,8 @@ var DiceGame = (function() {
         pool = [],
         highestMatch = 0,
         animLength = 500,
-        $throwButton, $liveContainer, $matchContainer,
+        currentScore = 0,
+        $throwButton, $liveContainer, $matchContainer, $currentScore,
         translate = {
             1: 'show-front',
             2: 'show-back',
@@ -72,7 +73,7 @@ var DiceGame = (function() {
                 return;
             }
 
-            $('#quit-and-score').css('display', 'block');
+            $('#quit-and-score').css('display', 'inline-block');
 
             var that = this,
                 sameValueDice = live.filter(function (die) {
@@ -93,6 +94,8 @@ var DiceGame = (function() {
             }
 
             chosen = true;
+
+            updateScore();
 
             if (live.length == 0) {
                 devLog('Quitting because live length is 0');
@@ -132,6 +135,7 @@ var DiceGame = (function() {
         $matchContainer = $('#match-container');
         $throwButton = $('#roll-button');
         $quitAndScoreButton = $('#quit-and-score');
+        $currentScore = $('#current-score');
 
         $throwButton.on('click', function() {
             throwDice();
@@ -189,18 +193,26 @@ var DiceGame = (function() {
         quitWithScore(1);
     };
 
-    var quitAndScore = function() {
+    var updateScore = function() {
         var score = 0;
 
         for (die in pool) {
             score += pool[die].value;
         }
 
-        quitWithScore(score);
+        currentScore = score;
+
+        $currentScore.text(currentScore);
+    };
+
+    var quitAndScore = function() {
+        updateScore();
+
+        quitWithScore(currentScore);
     };
 
     var quitWithScore = function(score) {
-        notify('You got ' + score + ' soldiery points for your podcast of choice');
+        notify('You got ' + score + ' point(s) for your podcast of choice');
         $('#screen').css('display', 'block');
     };
 
