@@ -21,7 +21,7 @@ var DiceGame = (function() {
         pool = [],
         matchValue = null,
         animLength = 500,
-        $throwButton, $liveContainer, $matchContainer, $discardContainer,
+        $throwButton, $liveContainer, $matchContainer,
         translate = {
             1: 'show-front',
             2: 'show-back',
@@ -82,16 +82,10 @@ var DiceGame = (function() {
                     sameValueDice[num].moveToPool();
                 }
             } else {
-                // If this is nor our first match, check our logic
-                if (matchValue == this.value) {
+                // If this is not our first match, check our logic
+                if (this.value == matchValue || this.value > matchValue) {
                     for (num in sameValueDice) {
                         sameValueDice[num].moveToPool();
-                    }
-                }
-
-                if (matchValue < this.value) {
-                    for (num in sameValueDice) {
-                        sameValueDice[num].moveToDiscard();
                     }
                 }
 
@@ -113,12 +107,6 @@ var DiceGame = (function() {
             pool.push(this);
 
             this.$el.closest('.cube-wrapper').detach().appendTo($matchContainer);
-        },
-        moveToDiscard: function() {
-            // @todo: Make this better
-            this.removeFromLive();
-
-            this.$el.closest('.cube-wrapper').detach().appendTo($discardContainer);
         },
         isInPool: function() {
 
@@ -142,7 +130,6 @@ var DiceGame = (function() {
 
         $liveContainer = $('#live-container');
         $matchContainer = $('#match-container');
-        $discardContainer = $('#discard-container');
         $throwButton = $('#roll-button');
         $quitAndScoreButton = $('#quit-and-score');
 
@@ -175,7 +162,7 @@ var DiceGame = (function() {
         delayPastAnim(function () {
             notify('Fail roll!');
 
-            quitAndScore();
+            quitFailRoll();
         });
     };
 
@@ -197,8 +184,16 @@ var DiceGame = (function() {
         }, 3000);
     };
 
+    var quitFailRoll = function () {
+        quitWithScore(1);
+    };
+
     var quitAndScore = function() {
-        notify('todo: actually write score calculations');
+        quitWithScore('@todo');
+    };
+
+    var quitWithScore = function(score) {
+        notify('Your score was: ' + score);
     };
 
     return {
