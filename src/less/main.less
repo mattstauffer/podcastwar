@@ -98,7 +98,6 @@ html {
     }
 
 .cube {
-    cursor: pointer;
     height: 100%;
     position: absolute;
     transform-style: preserve-3d;
@@ -122,10 +121,16 @@ html {
     width: @cube-height;
 }
 
-    .cube:hover figure {
-        background: #eee;
+.live-container .cube {
+    cursor: pointer;
+}
+    .live-container .cube figure {
+
     }
 
+        .live-container .cube:hover figure {
+            background: #eee;
+        }
 
 // .cube .front  { background: hsla(  0, 100%, 50%, 1); }
 // .cube .back   { background: hsla( 60, 100%, 50%, 1); }

@@ -92,7 +92,6 @@ html {
           transform: translateY(400%);
 }
 .cube {
-  cursor: pointer;
   height: 100%;
   position: absolute;
   -webkit-transform-style: preserve-3d;
@@ -121,7 +120,10 @@ html {
           user-select: none;
   width: 100px;
 }
-.cube:hover figure {
+.live-container .cube {
+  cursor: pointer;
+}
+.live-container .cube:hover figure {
   background: #eee;
 }
 .cube .front {

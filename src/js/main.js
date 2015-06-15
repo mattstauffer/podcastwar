@@ -7,7 +7,6 @@ http://codepen.io/tameraydin/pen/CADvB
 
 /*
 @todo:
-- Add scoring
 - Add user accounts
 - Add usage limitations
 - Use pips instead of numbers
@@ -15,6 +14,7 @@ http://codepen.io/tameraydin/pen/CADvB
 
 var DiceGame = (function() {
     var numDice = 5,
+        devMode = true,
         rolled = false,
         chosen = false,
         live = [],
@@ -57,6 +57,11 @@ var DiceGame = (function() {
             });
         },
         choose: function() {
+            if (! this.isLive()) {
+                devLog('Not live, no choos-y');
+                return;
+            }
+
             if (chosen) {
                 notify('You cannot choose a die until you roll again.');
                 return;
@@ -90,6 +95,7 @@ var DiceGame = (function() {
             chosen = true;
 
             if (live.length == 0) {
+                devLog('Quitting because live length is 0');
                 quitAndScore();
             }
         },
@@ -100,11 +106,13 @@ var DiceGame = (function() {
 
             this.$el.closest('.cube-wrapper').detach().appendTo($matchContainer);
         },
-        isInPool: function() {
-
-        },
         isLive: function() {
+            var that = this,
+                matches = live.filter(function(die) {
+                    return die.id == that.id;
+                });
 
+            return matches.length > 0;
         },
         roll: function() {
             var num = getRandomNumber();
@@ -130,6 +138,7 @@ var DiceGame = (function() {
         });
 
         $quitAndScoreButton.on('click', function() {
+            devLog('Quitting because quit and score button pressed.');
             quitAndScore();
         });
     };
@@ -192,6 +201,12 @@ var DiceGame = (function() {
 
     var quitWithScore = function(score) {
         notify('You got ' + score + ' soldiery points for your podcast of choice');
+    };
+
+    var devLog = function(str) {
+        if (devMode) {
+            console.log(str);
+        }
     };
 
     return {
