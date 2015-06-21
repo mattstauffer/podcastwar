@@ -12,6 +12,42 @@ http://codepen.io/tameraydin/pen/CADvB
 - Use pips instead of numbers
  */
 
+// http://davidwalsh.name/pubsub-javascript
+var events = (function() {
+    var topics = {},
+        hOP = topics.hasOwnProperty;
+
+    return {
+        subscribe: function(topic, listener) {
+            // Create the topic's object if not yet created
+            if (! hOP.call(topics, topic)) {
+                topics[topic] = [];
+            }
+
+            // Add the listener to queue
+            var index = topics[topic].push(listener) -1;
+
+            // Provide handle back for removal of topic
+            return {
+                remove: function() {
+                    delete topics[topic][index];
+                }
+            };
+        },
+        publish: function(topic, info) {
+            // If the topic doesn't exist, or there's no listeners in queue, just leave
+            if (! hOP.call(topics, topic)) {
+                return;
+            }
+
+            // Cycle through topics queue, fire!
+            topics[topic].forEach(function (item) {
+               item(info !== undefined ? info : {});
+            });
+        }
+    };
+})();
+
 var DiceGame = (function() {
     var numDice = 5,
         devMode = true,
@@ -89,7 +125,7 @@ var DiceGame = (function() {
                 highestMatch = this.value;
             }
 
-            for (num in sameValueDice) {
+            for (var num in sameValueDice) {
                 sameValueDice[num].moveToPool();
             }
 
@@ -97,7 +133,7 @@ var DiceGame = (function() {
 
             updateScore();
 
-            if (live.length == 0) {
+            if (live.length === 0) {
                 devLog('Quitting because live length is 0');
                 quitAndScore();
             }
@@ -126,6 +162,14 @@ var DiceGame = (function() {
         }
     };
 
+    var registerListeners = function() {
+        // E.g.
+        events.subscribe('die.chosen', function (obj) {
+            // Do something now that the event has occurred
+            // e.g. reset state machine / toggles to "rollable"
+        });
+    };
+
     var init = function() {
         for (i = 1; i <= numDice; i++) {
             live.push(new Die(i));
@@ -145,13 +189,15 @@ var DiceGame = (function() {
             devLog('Quitting because quit and score button pressed.');
             quitAndScore();
         });
+
+        registerListeners();
     };
 
     var throwDice = function() {
         $('.cube-wrapper').removeClass('queued');
         rolled = true;
 
-        for (cubeNum in live) {
+        for (var cubeNum in live) {
             live[cubeNum].roll();
         }
 
@@ -196,7 +242,7 @@ var DiceGame = (function() {
     var updateScore = function() {
         var score = 0;
 
-        for (die in pool) {
+        for (var die in pool) {
             score += pool[die].value;
         }
 
@@ -224,7 +270,7 @@ var DiceGame = (function() {
 
     return {
         init: init
-    }
+    };
 })();
 
 $(function() {
