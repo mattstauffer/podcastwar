@@ -10,6 +10,7 @@ http://codepen.io/tameraydin/pen/CADvB
 - Add user accounts
 - Add usage limitations
 - Use pips instead of numbers
+- See if there's a good way to extract $el off of the domain object so it's totally UI-free
  */
 
 // http://davidwalsh.name/pubsub-javascript
@@ -157,36 +158,28 @@ var DiceGame = (function() {
     var registerListeners = function() {
         events.subscribe('dice.rolled', function (obj) {
             $('.cube-wrapper').removeClass('queued');
+        });
 
+        events.subscribe('dice.rolled', function (obj) {
             // @todo: State machines?
             rolled = true;
             chosen = false;
+        });
 
-            // Validate that roll can even go forward
-            for (var cubeNum in live) {
-                if (live[cubeNum].value >= highestMatch) {
-                    return;
-                }
-            }
-
-            delayPastAnim(function () {
-                notify('Fail roll!');
-
-                quitFailRoll();
-            });
+        events.subscribe('dice.rolled', function (obj) {
+            validate.liveAllowsFutureChoosing();
         });
 
         events.subscribe('die.chosen', function (obj) {
             $('#quit-and-score').css('display', 'inline-block');
+        });
 
+        events.subscribe('die.chosen', function (obj) {
             chosen = true;
 
-            updateScore();
+            scoring.updateScore();
 
-            if (live.length === 0) {
-                devLog('Quitting because live length is 0');
-                quitAndScore();
-            }
+            validate.liveContainsDice();
         });
 
         events.subscribe('die.movedToPool', function (die) {
@@ -195,6 +188,16 @@ var DiceGame = (function() {
 
         events.subscribe('die.rolled', function (die) {
             die.$el[0].className = 'cube ' + translate[die.value];
+        });
+
+        events.subscribe('score.changed', function () {
+            $currentScore.text(currentScore);
+        });
+
+        events.subscribe('play.scoredOut', function () {
+            notify('You got ' + currentScore + ' point(s) for your podcast of choice');
+
+            $('#screen').css('display', 'block');
         });
     };
 
@@ -215,7 +218,7 @@ var DiceGame = (function() {
 
         $quitAndScoreButton.on('click', function() {
             devLog('Quitting because quit and score button pressed.');
-            quitAndScore();
+            scoring.quitAndScore();
         });
 
         registerListeners();
@@ -237,6 +240,28 @@ var DiceGame = (function() {
         setTimeout(func, animLength);
     };
 
+    var validate = {
+        liveAllowsFutureChoosing: function() {
+           for (var cubeNum in live) {
+                if (live[cubeNum].value >= highestMatch) {
+                    return;
+                }
+            }
+
+            delayPastAnim(function () {
+                notify('Fail roll!');
+
+                scoring.failRoll();
+            });
+        },
+        liveContainsDice: function () {
+            if (live.length === 0) {
+                devLog('Quitting because live length is 0');
+                quitAndScore();
+            }
+        }
+    };
+
     var notify = function(str) {
         var $alert = $('<div class="alert">').text(str);
 
@@ -247,36 +272,35 @@ var DiceGame = (function() {
         }, 3000);
     };
 
-    var quitFailRoll = function () {
-        quitWithScore(1);
-    };
-
-    var updateScore = function() {
-        var score = 0;
-
-        for (var die in pool) {
-            score += pool[die].value;
-        }
-
-        currentScore = score;
-
-        $currentScore.text(currentScore);
-    };
-
-    var quitAndScore = function() {
-        updateScore();
-
-        quitWithScore(currentScore);
-    };
-
-    var quitWithScore = function(score) {
-        notify('You got ' + score + ' point(s) for your podcast of choice');
-        $('#screen').css('display', 'block');
-    };
-
     var devLog = function(str) {
         if (devMode) {
             console.log(str);
+        }
+    };
+
+    var scoring = {
+        failRoll: function() {
+            currentScore = 1;
+
+            events.publish('score.changed');
+
+            events.publish('play.scoredOut');
+        },
+        updateScore: function() {
+            var score = 0;
+
+            for (var die in pool) {
+                score += pool[die].value;
+            }
+
+            currentScore = score;
+
+            events.publish('score.changed');
+        },
+        quitAndScore: function() {
+            this.updateScore();
+
+            events.publish('play.scoredOut');
         }
     };
 
