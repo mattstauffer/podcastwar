@@ -109,13 +109,6 @@ var DiceGame = (function() {
                 return;
             }
 
-            $('#quit-and-score').css('display', 'inline-block');
-
-            var that = this,
-                sameValueDice = live.filter(function (die) {
-                    return die.value == that.value;
-                });
-
             if (this.value < highestMatch) {
                 notify("You can't choose dice with a value lower than your match.");
                 return;
@@ -125,25 +118,24 @@ var DiceGame = (function() {
                 highestMatch = this.value;
             }
 
+            var that = this;
+
+            sameValueDice = live.filter(function (die) {
+                return die.value == that.value;
+            });
+
             for (var num in sameValueDice) {
                 sameValueDice[num].moveToPool();
             }
 
-            chosen = true;
-
-            updateScore();
-
-            if (live.length === 0) {
-                devLog('Quitting because live length is 0');
-                quitAndScore();
-            }
+            events.publish('die.chosen', this);
         },
         moveToPool: function() {
             this.removeFromLive();
 
             pool.push(this);
 
-            this.$el.closest('.cube-wrapper').detach().appendTo($matchContainer);
+            events.publish('die.movedToPool', this);
         },
         isLive: function() {
             var that = this,
@@ -156,17 +148,53 @@ var DiceGame = (function() {
         roll: function() {
             var num = getRandomNumber();
 
-            this.$el[0].className = 'cube ' + translate[num];
-
             this.value = num;
+
+            events.publish('die.rolled', this);
         }
     };
 
     var registerListeners = function() {
-        // E.g.
+        events.subscribe('dice.rolled', function (obj) {
+            $('.cube-wrapper').removeClass('queued');
+
+            // @todo: State machines?
+            rolled = true;
+            chosen = false;
+
+            // Validate that roll can even go forward
+            for (var cubeNum in live) {
+                if (live[cubeNum].value >= highestMatch) {
+                    return;
+                }
+            }
+
+            delayPastAnim(function () {
+                notify('Fail roll!');
+
+                quitFailRoll();
+            });
+        });
+
         events.subscribe('die.chosen', function (obj) {
-            // Do something now that the event has occurred
-            // e.g. reset state machine / toggles to "rollable"
+            $('#quit-and-score').css('display', 'inline-block');
+
+            chosen = true;
+
+            updateScore();
+
+            if (live.length === 0) {
+                devLog('Quitting because live length is 0');
+                quitAndScore();
+            }
+        });
+
+        events.subscribe('die.movedToPool', function (die) {
+            die.$el.closest('.cube-wrapper').detach().appendTo($matchContainer);
+        });
+
+        events.subscribe('die.rolled', function (die) {
+            die.$el[0].className = 'cube ' + translate[die.value];
         });
     };
 
@@ -194,27 +222,11 @@ var DiceGame = (function() {
     };
 
     var throwDice = function() {
-        $('.cube-wrapper').removeClass('queued');
-        rolled = true;
-
         for (var cubeNum in live) {
             live[cubeNum].roll();
         }
 
-        chosen = false;
-
-        // Validate that roll can even go forward
-        for (cubeNum in live) {
-            if (live[cubeNum].value >= highestMatch) {
-                return;
-            }
-        }
-
-        delayPastAnim(function () {
-            notify('Fail roll!');
-
-            quitFailRoll();
-        });
+        events.publish('dice.rolled');
     };
 
     var getRandomNumber = function() {
