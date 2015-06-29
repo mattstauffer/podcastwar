@@ -201,6 +201,20 @@ var DiceGame = (function() {
         events.subscribe('play.scoredOut', function () {
             notify('You got ' + currentScore + ' point(s) for ' + podcastTranslate[pickedPodcast]);
 
+            $.ajax({
+                method: 'POST',
+                url: 'http://podcastwar.net:8093/games',
+                data: {
+                    'points': currentScore,
+                    'podcast': pickedPodcast
+                },
+                success: function (data) {
+                    console.log(data);
+                },
+                contentType: "jsonp",
+                dataType: 'jsonp',
+            });
+
             $('#screen').css('display', 'block');
         });
     };
