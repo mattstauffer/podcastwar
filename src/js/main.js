@@ -203,7 +203,7 @@ var DiceGame = (function() {
 
             $.ajax({
                 method: 'POST',
-                url: 'http://podcastwar.net:8093/games',
+                url: '/api/games',
                 data: {
                     'points': currentScore,
                     'podcast': pickedPodcast
@@ -211,8 +211,6 @@ var DiceGame = (function() {
                 success: function (data) {
                     console.log(data);
                 },
-                contentType: "jsonp",
-                dataType: 'jsonp',
             });
 
             $('#screen').css('display', 'block');

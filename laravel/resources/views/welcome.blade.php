@@ -1,8 +1,8 @@
 <html>
 <head>
-    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="/dist/css/main.css">
     <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
-    <script src="js/bundle.js"></script>
+    <script src="/dist/js/bundle.js"></script>
 </head>
 <body>
     <div id="notifications" class="notifications"></div>
