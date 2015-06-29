@@ -59,7 +59,7 @@ var DiceGame = (function() {
         highestMatch = 0,
         animLength = 500,
         currentScore = 0,
-        $throwButton, $liveContainer, $matchContainer, $currentScore,
+        $liveContainer, $matchContainer, $currentScore, pickedPodcast,
         translate = {
             1: 'show-front',
             2: 'show-back',
@@ -67,6 +67,10 @@ var DiceGame = (function() {
             4: 'show-left',
             5: 'show-top',
             6: 'show-bottom'
+        },
+        podcastTranslate = {
+            'fmgs': 'The Five-Minute Geek Show',
+            'mildly-alarming': 'The Mildly Alarming Podcast'
         };
 
     function Die(num) {
@@ -195,7 +199,19 @@ var DiceGame = (function() {
         });
 
         events.subscribe('play.scoredOut', function () {
-            notify('You got ' + currentScore + ' point(s) for your podcast of choice');
+            notify('You got ' + currentScore + ' point(s) for ' + podcastTranslate[pickedPodcast]);
+
+            $.ajax({
+                method: 'POST',
+                url: '/api/games',
+                data: {
+                    'points': currentScore,
+                    'podcast': pickedPodcast
+                },
+                success: function (data) {
+                    console.log(data);
+                },
+            });
 
             $('#screen').css('display', 'block');
         });
@@ -208,20 +224,29 @@ var DiceGame = (function() {
 
         $liveContainer = $('#live-container');
         $matchContainer = $('#match-container');
-        $throwButton = $('#roll-button');
-        $quitAndScoreButton = $('#quit-and-score');
         $currentScore = $('#current-score');
 
-        $throwButton.on('click', function() {
+        $('#roll-button').on('click', function() {
             throwDice();
         });
 
-        $quitAndScoreButton.on('click', function() {
+        $('#quit-and-score').on('click', function() {
             devLog('Quitting because quit and score button pressed.');
             scoring.quitAndScore();
         });
 
+        $('.pick-a-podcast__button').on('click', function() {
+            pickPodcast($(this).data('podcast-slug'));
+            $('.pick-a-podcast').hide();
+
+            // @todo: Cookie?
+        });
+
         registerListeners();
+    };
+
+    var pickPodcast = function(podcastSlug) {
+        pickedPodcast = podcastSlug;
     };
 
     var throwDice = function() {

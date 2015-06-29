@@ -11,6 +11,40 @@ html {
   background: #ddd;
   font-family: sans-serif;
 }
+.pick-a-podcast {
+  background: #eee;
+  bottom: 1rem;
+  left: 1rem;
+  padding-top: 8rem;
+  position: fixed;
+  right: 1rem;
+  text-align: center;
+  top: 1rem;
+  z-index: 20;
+}
+.pick-a-podcast__title {
+  font-size: 4rem;
+}
+.pick-a-podcast__buttons {
+  clear: both;
+  margin-top: 3rem;
+}
+.pick-a-podcast__button {
+  border-radius: .25rem;
+  color: #fff;
+  display: inline-block;
+  font-size: 1.25rem;
+  font-weight: bold;
+  padding: 1rem;
+  text-decoration: none;
+  width: 25%;
+}
+.pick-a-podcast__button--mildly-alarming {
+  background: #47679c;
+}
+.pick-a-podcast__button--fmgs {
+  background: #e90e1b ;
+}
 .wrapper {
   margin: 2em auto 50em;
   max-width: 1200px;

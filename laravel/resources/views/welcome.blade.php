@@ -1,11 +1,19 @@
 <html>
 <head>
-    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="/dist/css/main.css">
     <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
-    <script src="js/bundle.js"></script>
+    <script src="/dist/js/bundle.js"></script>
 </head>
 <body>
     <div id="notifications" class="notifications"></div>
+
+    <div id="pick-a-podcast" class="pick-a-podcast">
+        <span class="pick-a-podcast__title">Pick a podcast to back in the great Podcast War</span>
+        <div class="pick-a-podcast__buttons">
+            <a href="#" class="pick-a-podcast__button pick-a-podcast__button--fmgs" data-podcast-slug="fmgs">The Five-Minute Geek Show</a>
+            <a href="#" class="pick-a-podcast__button pick-a-podcast__button--mildly-alarming" data-podcast-slug="mildly-alarming">The Mildly Alarming Podcast</a>
+        </div>
+    </div>
 
     <div class="wrapper">
         <h1>Podcast War</h1>
