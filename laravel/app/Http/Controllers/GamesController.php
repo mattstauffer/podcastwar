@@ -5,15 +5,20 @@ use App\Jobs\TrackGame;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Session;
 
 class GamesController extends Controller
 {
     public function store()
     {
-        $points = Input::get('points');
-        $podcast = Input::get('podcast');
-
-        $this->dispatch(new TrackGame($points, $podcast, Request::getClientIp()));
+        $this->dispatch(new TrackGame(
+            Input::get('points'),
+            Input::get('podcast'),
+            Request::getClientIp(),
+            Session::get('username'),
+            Session::get('email'),
+            Session::get('twitter')
+        ));
 
         return Response::json([
             'success' => true
