@@ -59,7 +59,8 @@ var DiceGame = (function() {
         highestMatch = 0,
         animLength = 500,
         currentScore = 0,
-        $liveContainer, $matchContainer, $currentScore, pickedPodcast,
+        $liveContainer, $matchContainer, $currentScore, $rollButton,
+        pickedPodcast,
         translate = {
             1: 'show-front',
             2: 'show-back',
@@ -180,6 +181,7 @@ var DiceGame = (function() {
 
         events.subscribe('die.chosen', function (obj) {
             chosen = true;
+            rolled = false;
 
             scoring.updateScore();
 
@@ -209,7 +211,7 @@ var DiceGame = (function() {
                     'podcast': pickedPodcast
                 },
                 success: function (data) {
-                    console.log(data);
+                    devLog(data);
                 },
             });
 
@@ -225,8 +227,9 @@ var DiceGame = (function() {
         $liveContainer = $('#live-container');
         $matchContainer = $('#match-container');
         $currentScore = $('#current-score');
+        $rollButton = $('#roll-button');
 
-        $('#roll-button').on('click', function() {
+        $rollButton.on('click', function() {
             throwDice();
         });
 
@@ -250,6 +253,11 @@ var DiceGame = (function() {
     };
 
     var throwDice = function() {
+        if (rolled) {
+            notify("You can't roll again until you choose.");
+            return;
+        }
+
         for (var cubeNum in live) {
             live[cubeNum].roll();
         }
@@ -282,7 +290,7 @@ var DiceGame = (function() {
         liveContainsDice: function () {
             if (live.length === 0) {
                 devLog('Quitting because live length is 0');
-                quitAndScore();
+                $rollButton.hide();
             }
         }
     };
