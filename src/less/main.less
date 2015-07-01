@@ -14,14 +14,8 @@ html {
 }
 
 .pick-a-podcast {
-    background: #eee;
-    bottom: 1rem;
-    left: 1rem;
-    padding-top: 8rem;
-    position: fixed;
-    right: 1rem;
+    padding: 8rem 2rem;
     text-align: center;
-    top: 1rem;
     z-index: 20;
 
     &__title {
@@ -41,7 +35,7 @@ html {
         font-weight: bold;
         padding: 1rem;
         text-decoration: none;
-        width: 25%;
+        width: 45%;
 
         &--mildly-alarming {
             background: #47679c;
@@ -50,10 +44,24 @@ html {
         &--fmgs {
             background: #e90e1b ;
         }
+
+        @media only screen and (min-width: 1100px) {
+            width: 25%;
+        }
+    }
+
+    .points {
+        font-size: 1.5rem;
+
+        &__title {
+            font-size: 2rem;
+            font-weight: bold;
+        }
     }
 }
 
 .wrapper {
+    display: none;
     margin: 2em auto 50em;
     max-width: 1200px;
     overflow: visible;

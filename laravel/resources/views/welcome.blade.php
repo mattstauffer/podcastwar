@@ -13,13 +13,15 @@
             <a href="#" class="pick-a-podcast__button pick-a-podcast__button--fmgs" data-podcast-slug="fmgs">The Five-Minute Geek Show</a>
             <a href="#" class="pick-a-podcast__button pick-a-podcast__button--mildly-alarming" data-podcast-slug="mildly-alarming">The Mildly Alarming Podcast</a>
         </div>
-        <br><br><br><br><br><br><br><br><br><br>
+        <br><br><br><br><br><br><br>
 
         @inject('score', 'App\Services\Score')
 
-        Current points:<br><br>
-        Five-Minute Geek Show: {{ $score->geeky() }}<br>
-        Mildly Alarming Podcast: {{ $score->alarmy() }}<br>
+        <div class="points">
+            <span class="points__title">Current points:</span><br>
+            Five-Minute Geek Show: {{ $score->geeky() }}<br>
+            Mildly Alarming Podcast: {{ $score->alarmy() }}<br>
+        </div>
 
         <br><br><br><br><br>
         <a href="/logout">Log out</a>

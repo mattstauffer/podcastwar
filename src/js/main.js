@@ -241,6 +241,7 @@ var DiceGame = (function() {
         $('.pick-a-podcast__button').on('click', function() {
             pickPodcast($(this).data('podcast-slug'));
             $('.pick-a-podcast').hide();
+            $('.wrapper').show();
 
             // @todo: Cookie?
         });
