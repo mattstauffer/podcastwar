@@ -2,12 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\GuardsAgainstMultiplePlays;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Session;
 use Laravel\Socialite\Facades\Socialite;
 
 class AuthController extends Controller
 {
+    use GuardsAgainstMultiplePlays;
+
+    public function logins()
+    {
+        return view('logins');
+    }
+
     public function loginFacebook()
     {
         return Socialite::with('facebook')->redirect();
@@ -24,7 +32,7 @@ class AuthController extends Controller
         Session::put('username', 'facebook-' . $user->user['id']);
         Session::put('email', $user->user['email']);
 
-        return redirect('/');
+        return $this->returnGuardedLogin();
     }
 
     public function callbackTwitter()
@@ -32,6 +40,15 @@ class AuthController extends Controller
         $user = Socialite::with('twitter')->user();
         Session::put('username', 'twitter-' . $user->id);
         Session::put('twitter', $user->nickname);
+
+        return $this->returnGuardedLogin();
+    }
+
+    public function returnGuardedLogin()
+    {
+        if ($this->userHasPlayedToday()) {
+            return redirect('daily-limit');
+        }
 
         return redirect('/');
     }
@@ -42,5 +59,10 @@ class AuthController extends Controller
         Session::forget('email');
 
         return redirect('/');
+    }
+
+    public function dailyLimit()
+    {
+        return view('daily-limit');
     }
 }
