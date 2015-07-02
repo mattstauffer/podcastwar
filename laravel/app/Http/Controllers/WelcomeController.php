@@ -18,7 +18,7 @@ class WelcomeController extends Controller
 
         if ($this->userHasPlayedToday()) {
             // @todo: This should be middleware
-            return redirect('daily-limit');
+            // return redirect('daily-limit');
         }
 
         return view('welcome');
