@@ -118,7 +118,7 @@
             </div>
         </section>
         <section class="pool-container container">
-            <h2>Set Aside</h2>
+            <h2>Set Aside (max die: <span id="max-die">none</span>)</h2>
             <div id="match-container">
             </div>
         </section>

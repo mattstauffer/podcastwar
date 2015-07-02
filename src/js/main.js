@@ -1,18 +1,8 @@
-/* References:
-http://www.trollmystic.com/pub/2012/06/03/javascript-animated-d6-dice-roller-code-released-to-public-domain/
-http://eposic.org/samples/dice/part3.php
-http://codepen.io/SpeauDetcR/pen/nxbCz
-http://codepen.io/tameraydin/pen/CADvB
-*/
-
 /*
 @todo:
-- Add user accounts
-- Add usage limitations
 - Use pips instead of numbers
 - See if there's a good way to extract $el off of the domain object so it's totally UI-free
  */
-
 // http://davidwalsh.name/pubsub-javascript
 var events = (function() {
     var topics = {},
@@ -51,6 +41,7 @@ var events = (function() {
 
 var DiceGame = (function() {
     var numDice = 5,
+        scoreFromPreviousRounds = 0,
         devMode = true,
         rolled = false,
         chosen = false,
@@ -59,7 +50,7 @@ var DiceGame = (function() {
         highestMatch = 0,
         animLength = 500,
         currentScore = 0,
-        $liveContainer, $matchContainer, $currentScore, $rollButton,
+        $liveContainer, $matchContainer, $currentScore, $rollButton, $maxDie,
         pickedPodcast,
         translate = {
             1: 'show-front',
@@ -92,13 +83,6 @@ var DiceGame = (function() {
     }
 
     Die.prototype = {
-        removeFromLive: function() {
-            var that = this;
-
-            live = live.filter(function (die) {
-                return die.id != that.id;
-            });
-        },
         choose: function() {
             if (! this.isLive()) {
                 devLog('Not live, no choos-y');
@@ -122,6 +106,7 @@ var DiceGame = (function() {
 
             if (this.value > highestMatch) {
                 highestMatch = this.value;
+                $maxDie.text(highestMatch);
             }
 
             var that = this;
@@ -136,12 +121,33 @@ var DiceGame = (function() {
 
             events.publish('die.chosen', this);
         },
+        removeFromLive: function() {
+            var that = this;
+
+            live = live.filter(function (die) {
+                return die.id != that.id;
+            });
+        },
         moveToPool: function() {
             this.removeFromLive();
 
             pool.push(this);
 
             events.publish('die.movedToPool', this);
+        },
+        removeFromPool: function() {
+            var that = this;
+
+            pool = pool.filter(function (die) {
+                return die.id != that.id
+            });
+        },
+        moveToLive: function() {
+            this.removeFromPool();
+
+            live.push(this);
+
+            events.publish('die.movedToLive', this);
         },
         isLive: function() {
             var that = this,
@@ -161,6 +167,17 @@ var DiceGame = (function() {
     };
 
     var registerListeners = function() {
+        events.subscribe('dice.rolling', function (obj) {
+            // handle farkle-y rolling after getting all 5
+            if (! liveContainsDice()) {
+                scoreFromPreviousRounds = scoring.getPoolScore();
+
+                while (pool.length > 0) {
+                    pool[0].moveToLive();
+                }
+            }
+        });
+
         events.subscribe('dice.rolled', function (obj) {
             $('.cube-wrapper').removeClass('queued');
         });
@@ -184,12 +201,14 @@ var DiceGame = (function() {
             rolled = false;
 
             scoring.updateScore();
-
-            validate.liveContainsDice();
         });
 
         events.subscribe('die.movedToPool', function (die) {
             die.$el.closest('.cube-wrapper').detach().appendTo($matchContainer);
+        });
+
+        events.subscribe('die.movedToLive', function (die) {
+            die.$el.closest('.cube-wrapper').detach().appendTo($liveContainer);
         });
 
         events.subscribe('die.rolled', function (die) {
@@ -228,6 +247,7 @@ var DiceGame = (function() {
         $matchContainer = $('#match-container');
         $currentScore = $('#current-score');
         $rollButton = $('#roll-button');
+        $maxDie = $('#max-die');
 
         $rollButton.on('click', function() {
             throwDice();
@@ -259,6 +279,8 @@ var DiceGame = (function() {
             return;
         }
 
+        events.publish('dice.rolling');
+
         for (var cubeNum in live) {
             live[cubeNum].roll();
         }
@@ -274,6 +296,10 @@ var DiceGame = (function() {
         setTimeout(func, animLength);
     };
 
+    var liveContainsDice = function () {
+        return live.length !== 0;
+    };
+
     var validate = {
         liveAllowsFutureChoosing: function() {
            for (var cubeNum in live) {
@@ -287,12 +313,6 @@ var DiceGame = (function() {
 
                 scoring.failRoll();
             });
-        },
-        liveContainsDice: function () {
-            if (live.length === 0) {
-                devLog('Quitting because live length is 0');
-                $rollButton.hide();
-            }
         }
     };
 
@@ -320,14 +340,17 @@ var DiceGame = (function() {
 
             events.publish('play.scoredOut');
         },
-        updateScore: function() {
+        getPoolScore: function() {
             var score = 0;
 
             for (var die in pool) {
                 score += pool[die].value;
             }
 
-            currentScore = score;
+            return score;
+        },
+        updateScore: function() {
+            currentScore = this.getPoolScore() + scoreFromPreviousRounds;
 
             events.publish('score.changed');
         },
