@@ -48,7 +48,7 @@
                         <li>After setting aside dice, you can either <strong>roll again</strong> or <strong>score out</strong>. If you score out, the sum of your set-aside dice will be tallied, and that will be your total score.</li>
                         <li>If you choose to roll again, and none of the dice roll <em>as high or higher</em> than your highest set-aside dice, you lose all of your set-aside dice and will only receive one point.</li>
                         <li>If you choose to roll again, and at least one die is greater to or equal than your highest set-aside dice, you can choose to set aside dice and score out or roll again</li>
-                        <li>If you set aside all of your dice, the game is over and you automatically score out</li>
+                        <li>If you set aside all of your dice, you can keep re-rolling and the dice will all re-enter the live container. Please note that, in this circumstance, your max die stays the same.</li>
                     </ul>
                 </li>
             </ul>
