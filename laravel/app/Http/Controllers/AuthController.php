@@ -47,7 +47,7 @@ class AuthController extends Controller
     public function returnGuardedLogin()
     {
         if ($this->userHasPlayedToday()) {
-            return redirect('daily-limit');
+            // return redirect('daily-limit');
         }
 
         return redirect('/');
