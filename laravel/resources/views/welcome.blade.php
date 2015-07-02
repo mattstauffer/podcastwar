@@ -33,26 +33,28 @@
 
         <div class="instructions">
             <strong>NOTE: This is just a mirror of the under-development app. It doesn't actually work yet.</strong><br><br>
-            How it works:<br><br>
-            <ul>
-                <li><strong>The war</strong>
-                    <ul>
-                        <li>Pick your podcast of choice: <a href="http://www.fiveminutegeekshow.com/">The Five-Minute Geek Show</a> or <a href="http://mildlyalarming.com/">The Mildly Alarming Podcast</a>. (@todo)</li>
-                        <li>Authenticate with your social media profile (@todo). We won't post. This is just for identity.</li>
-                        <li>You can play once per day, for a week. Every point you accrue goes toward your podcast. Whichever podcast has the most points at the end of the week wins.</li>
-                    </ul>
-                </li>
-                <li><strong>How to play</strong>
-                    <ul>
-                        <li>The goal is to "set aside" as many points as possible. "Points" are just the sum of the die you set aside.</li>
-                        <li>After every roll, you have to choose a single die to <strong>set aside</strong>. Every die with the same number showing will also be set aside with it.</li>
-                        <li>After setting aside dice, you can either <strong>roll again</strong> or <strong>score out</strong>. If you score out, the sum of your set-aside dice will be tallied, and that will be your total score.</li>
-                        <li>If you choose to roll again, and none of the dice roll <em>as high or higher</em> than your highest set-aside dice, you lose all of your set-aside dice and will only receive one point.</li>
-                        <li>If you choose to roll again, and at least one die is greater to or equal than your highest set-aside dice, you can choose to set aside dice and score out or roll again</li>
-                        <li>If you set aside all of your dice, you can keep re-rolling and the dice will all re-enter the live container. Please note that, in this circumstance, your max die stays the same.</li>
-                    </ul>
-                </li>
-            </ul>
+            <a href="#" id="how-it-works-button">How it works</a>
+            <div id="how-it-works-container" class="how-it-works-container">
+                <ul>
+                    <li><strong>The war</strong>
+                        <ul>
+                            <li>Pick your podcast of choice: <a href="http://www.fiveminutegeekshow.com/">The Five-Minute Geek Show</a> or <a href="http://mildlyalarming.com/">The Mildly Alarming Podcast</a>.</li>
+                            <li>Authenticate with your social media profile. We won't post. This is just for identity.</li>
+                            <li>You can play once per day, for a week. Every point you accrue goes toward your podcast. Whichever podcast has the most points at the end of the week wins.</li>
+                        </ul>
+                    </li>
+                    <li><strong>How to play</strong>
+                        <ul>
+                            <li>The goal is to "set aside" as many points as possible. "Points" are just the sum of the die you set aside.</li>
+                            <li>After every roll, you have to choose a single die to <strong>set aside</strong>. Every die with the same number showing will also be set aside with it.</li>
+                            <li>After setting aside dice, you can either <strong>roll again</strong> or <strong>score out</strong>. If you score out, the sum of your set-aside dice will be tallied, and that will be your total score.</li>
+                            <li>If you choose to roll again, and none of the dice roll <em>as high or higher</em> than your highest set-aside dice, you lose all of your set-aside dice and will only receive one point.</li>
+                            <li>If you choose to roll again, and at least one die is greater to or equal than your highest set-aside dice, you can choose to set aside dice and score out or roll again</li>
+                            <li>If you set aside all of your dice, you can keep re-rolling and the dice will all re-enter the live container. Please note that, in this circumstance, your max die stays the same.</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
         </div>
 
         <div id="screen" class="screen">

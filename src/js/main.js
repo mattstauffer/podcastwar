@@ -266,6 +266,19 @@ var DiceGame = (function() {
             // @todo: Cookie?
         });
 
+        $('#how-it-works-button').on('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            $('#how-it-works-container').show();
+
+            $('body').on('click.hiw-esecape', function() {
+                $('#how-it-works-container').hide();
+
+                $('body').off('click.hiwescape');
+            });
+        });
+
         registerListeners();
     };
 
