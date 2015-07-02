@@ -8,6 +8,7 @@
     <div id="notifications" class="notifications"></div>
 
     <div id="pick-a-podcast" class="pick-a-podcast">
+        <h1><img src="/podcast-war-logo.png" alt="Podcast War" class="logo"></h1>
         <span class="pick-a-podcast__title">Pick a podcast to back in the great Podcast War</span>
         <div class="pick-a-podcast__buttons">
             <a href="#" class="pick-a-podcast__button pick-a-podcast__button--fmgs" data-podcast-slug="fmgs">The Five-Minute Geek Show</a>
@@ -28,7 +29,7 @@
     </div>
 
     <div class="wrapper">
-        <h1>Podcast War</h1>
+        <h1><img src="/podcast-war-logo.png" alt="Podcast War" class="logo"></h1>
 
         <div class="instructions">
             <strong>NOTE: This is just a mirror of the under-development app. It doesn't actually work yet.</strong><br><br>

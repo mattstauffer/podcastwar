@@ -24,6 +24,12 @@
             padding: 1.5rem;
         }
 
+        .logo {
+            display: block;
+            margin: 0 auto 1em;
+            max-width: 225px;
+        }
+
         h1 {
             margin-top: 0;
         }
@@ -63,7 +69,7 @@
 </head>
 <body>
 <div class="wrapper">
-    <h1>Podcast War</h1>
+    <h1><img src="/podcast-war-logo.png" alt="Podcast War" class="logo"></h1>
 
     @yield('content')
 </div>
